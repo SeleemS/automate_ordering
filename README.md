@@ -17,7 +17,7 @@ This code is setup to work with AWS. Hosted on AWS Lambda, and invoked on a sche
 
 ***How it Works:***
 
-1. Get MarketMan auth token (expires weekly)
+1. Get MarketMan **Auth Token** (expires weekly)
 2. Pull **GetItems** report, extract data by key **InventoryItems** and transform into Pandas df
 3. Define a function to convert UOM where needed
 4. Check for all items in **InventoryItems** where **OnHand** < **MinOnHand**, and **MainPurchaseOption** = "Vendor of Choice"
