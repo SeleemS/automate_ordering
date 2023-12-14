@@ -27,5 +27,5 @@ This code is setup to work with AWS. Hosted on AWS Lambda, and invoked on a sche
 
 **Should be setup to work in the background.**
 
-Must ensure that Inventory Counts, MinOnHand, and Par Levels are updated regularly throughout the year to match sales.
+Must ensure that Inventory Counts are accurate, and MinOnHand + Par Levels are updated regularly throughout the year.
 
