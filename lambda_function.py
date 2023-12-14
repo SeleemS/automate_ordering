@@ -10,6 +10,13 @@ def lambda_handler(event, context):
   from datetime import datetime, timedelta
   import pytz
 
+  # Get the GUIDs for the desired buyer and store
+  store_guid = "xyz"
+  buyer_guid = "xyz"
+  vendor_guid = "xyz"
+  api_key = "xyz"
+  api_password = "xyz"
+
   url = "https://api.marketman.com/v3/buyers/auth/GetToken"
 
   payload = json.dumps({
@@ -30,15 +37,11 @@ def lambda_handler(event, context):
   print(auth_token)
 
 
-  #GetItems Report
-  desired_buyer_guid = sq1_buyer_guid
-  desired_store_guid = sq1_guid
-
   url = "https://api.marketman.com/v3/buyers/inventory/GetItems"
 
   payload = json.dumps({
     "itemIDs": None,
-    "BuyerGuid": sq1_guid
+    "BuyerGuid": store_guid
   })
   headers = {
     'Content-Type': 'application/json',
@@ -202,8 +205,8 @@ def lambda_handler(event, context):
 
   # Format the payload for the API call
   payload = {
-      "BuyerGuid": desired_store_guid,
-      "VendorGuid": sysco_guid,
+      "BuyerGuid": buyer_guid,
+      "VendorGuid": vendor_guid,
       "OrderStatus": "sent",
       "deliveryDateUTC": delivery_date,
       "sentDateUTC": sent_date,
