@@ -1,5 +1,3 @@
-
-
 def lambda_handler(event, context):
 
   import requests
@@ -10,13 +8,14 @@ def lambda_handler(event, context):
   from datetime import datetime, timedelta
   import pytz
 
-  # Get the GUIDs for the desired buyer and store
+  #DEFINE VARIABLES
   store_guid = "xyz"
   buyer_guid = "xyz"
   vendor_guid = "xyz"
   api_key = "xyz"
   api_password = "xyz"
 
+  #1. Get an Auth Token
   url = "https://api.marketman.com/v3/buyers/auth/GetToken"
 
   payload = json.dumps({
@@ -37,6 +36,8 @@ def lambda_handler(event, context):
   print(auth_token)
 
 
+
+  #2. Pull GetItems Report
   url = "https://api.marketman.com/v3/buyers/inventory/GetItems"
 
   payload = json.dumps({
@@ -52,21 +53,13 @@ def lambda_handler(event, context):
 
   data = json.loads(response.text)
 
-
-  # For demonstration, let's convert the data to a Pandas DataFrame.
-  df = pd.DataFrame(data['InventoryItems'])
-
-  # Now, you can process the DataFrame or return its contents as required.
-  print(df.head())
-
-  # If you want to return the data as a response from Lambda:
+  #Return lambda_response
   lambda_response = {
       'statusCode': 200,
       'body': json.dumps(data)
   }
 
-  import json
-
+  #Define function to convert UOM when needed
   def convert_uom(value, from_uom, to_uom):
 
       conversions = {
@@ -84,17 +77,11 @@ def lambda_handler(event, context):
       return value * conversion_factor
 
   def process_data(json_data):
-      # Define the full path for the input file
-      #input_json_path = os.path.join(os.getcwd(), input_json_filename)
-      
-      # Load the JSON data
-      #with open(input_json_path, 'r') as file:
-          #json_data = json.load(file)
-      
-      # Convert the list of dictionaries to a DataFrame using 'InventoryItems' key
+
+      #Convert the list of dictionaries to a DataFrame using 'InventoryItems' key
       df = pd.DataFrame(json_data['InventoryItems'])
       
-      # Filter items based on the specified conditions and adjust UOM if needed
+      #Filter items based on the specified conditions and adjust UOM if needed
       filtered_items = []
 
       for index, row in df.iterrows():
@@ -153,11 +140,7 @@ def lambda_handler(event, context):
 
       # Convert filtered items to a DataFrame
       filtered_df = pd.DataFrame(filtered_items)
-      
-      # Save filtered_df to a CSV file in the same directory
-      #output_csv_path = os.path.join(os.getcwd(), 'filtered_data.csv')
-      #filtered_df.to_csv(output_csv_path, index=False)
-      
+
       # Extract data to populate the config.json file
       config_data = {
           "items": []
@@ -179,11 +162,8 @@ def lambda_handler(event, context):
           })
       return config_data
 
-
   # You can call the function as follows
   config_data = process_data(data)
-
-
 
   catalog_items = []
   for item in config_data['items']:
@@ -210,9 +190,9 @@ def lambda_handler(event, context):
       "OrderStatus": "sent",
       "deliveryDateUTC": delivery_date,
       "sentDateUTC": sent_date,
-      "BuyerUserGuid": desired_buyer_guid,
+      "BuyerUserGuid": buyer_guid,
       "comments": None,
-      "catalogItems": catalog_items
+      "catalogItems": catalog_items,
   }
 
   headers = {
@@ -224,9 +204,7 @@ def lambda_handler(event, context):
   response = requests.post(url, headers=headers, json=payload)
 
   # Print the API response
-
   data = json.loads(response.text)
-
   return {
         'statusCode': 200,
         'body': json.dumps(data, indent=2)
