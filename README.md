@@ -23,7 +23,7 @@ This code is setup to work with **AWS**, hosted on **AWS Lambda**, and invoked o
 4. Checks for all items in **InventoryItems** where **OnHand** < **MinOnHand**, and **MainPurchaseOption** = "Vendor of Choice"
 5. Calculates restock qty based on **OnHand** value, **Par Level**, and **UOM**
 6. Adds all relevant items to dictionary **filtered_items** and converts into Pandas df
-7. Places order using the **filtered_items** df as a config file
+7. Places order directly to Marketman's API endpoint, using the **filtered_items** df as a config file
 
 **Should be setup to work in the background.**
 
