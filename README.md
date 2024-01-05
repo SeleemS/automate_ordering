@@ -2,7 +2,7 @@
 
 **Made to work with Marketman**
 
-This code is setup to work with **AWS**, hosted on **AWS Lambda**, and invoked on a schedule via **AWS Eventbridge.**
+This code is setup to work with **AWS Services**, hosted on **Lambda**, and invoked on a schedule via **Eventbridge.**
 
 ***How to Setup:***
 
